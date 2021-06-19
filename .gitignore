@@ -1,0 +1,4 @@
+*.sublime-*
+snippets/*
+!snippets/index.php
+!snippets/snippet-template.php
