@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Plugin Name: Snippets
- * Description:
+ * Plugin Name: Snippet Loader
+ * Description: Loads snippets.
  * Version: 0.1.0
  * Plugin URI: https://timbr.dev
  * Author: Tim Brugman
  * Author URI: https://timbr.dev
- * Text Domain: snippets
+ * Text Domain: snippet-loader
  */
 
 if ( !defined( 'ABSPATH' ) )
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) )
 
 function prefix_textdomain()
 {
-    return 'snippets';
+    return 'snippet-loader';
 }
 
 function get_snippets()
