@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Snippet Loader
  * Description: Loads snippets.
- * Version: 0.2.0
+ * Version: 0.2.1
  * Plugin URI: https://timbr.dev
  * Author: Tim Brugman
  * Author URI: https://timbr.dev
@@ -12,6 +12,11 @@
 
 if ( !defined( 'ABSPATH' ) )
     exit;
+
+define( 'SNPLDR_FILE_PATH', __FILE__ );
+define( 'SNPLDR_FILE', basename( __FILE__ ) );
+define( 'SNPLDR_DIR', basename( __DIR__ ) );
+define( 'SNPLDR_SNIPPETS_PATH', __DIR__.DIRECTORY_SEPARATOR.'snippets'.DIRECTORY_SEPARATOR );
 
 if ( !class_exists( 'SnippetLoader' ) )
 {
@@ -31,12 +36,28 @@ if ( !class_exists( 'SnippetLoader' ) )
         }
 
         /**
+         * Helpers.
+         */
+
+        private function textdomain()
+        {
+            return 'snippet-loader';
+        }
+
+        private function admin_url( $args = [] )
+        {
+            $args['page'] = 'snippet-loader';
+
+            return admin_url( 'options-general.php?'.http_build_query( $args ) );
+        }
+
+        /**
          * Setters.
          */
 
         private function set_snippet_paths()
         {
-            $snippets = glob( __DIR__.DIRECTORY_SEPARATOR.'snippets'.DIRECTORY_SEPARATOR.'*.php' );
+            $snippets = glob( SNPLDR_SNIPPETS_PATH.'*.php' );
 
             foreach ( $snippets as $k => $path )
                 if ( basename( $path ) == 'index.php' )
@@ -171,6 +192,13 @@ if ( !class_exists( 'SnippetLoader' ) )
             );
         }
 
+        public function hook_register_settings_link( $links )
+        {
+            $links['settings'] = '<a href="'.$this->admin_url().'">Settings</a>';
+
+            return $links;
+        }
+
         /**
          * Register Hooks.
          */
@@ -179,6 +207,8 @@ if ( !class_exists( 'SnippetLoader' ) )
         {
             // register settings page
             add_action( 'admin_menu', [ $this, 'hook_register_settings_page' ] );
+            // register settings link
+            add_filter( 'plugin_action_links_'.SNPLDR_DIR.'/'.SNPLDR_FILE, [ $this, 'hook_register_settings_link' ] );
         }
     }
 
